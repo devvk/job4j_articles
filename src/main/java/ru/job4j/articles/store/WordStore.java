@@ -15,11 +15,8 @@ import java.util.List;
 import java.util.Properties;
 
 public class WordStore implements Store<Word>, AutoCloseable {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(WordStore.class.getSimpleName());
-
     private final Properties properties;
-
     private Connection connection;
 
     public WordStore(Properties properties) {
@@ -66,7 +63,7 @@ public class WordStore implements Store<Word>, AutoCloseable {
     }
 
     @Override
-    public Word save(Word model) {
+    public void save(Word model) {
         LOGGER.info("Добавление слова в базу данных");
         var sql = "insert into dictionary(word) values(?);";
         try (var statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -80,7 +77,6 @@ public class WordStore implements Store<Word>, AutoCloseable {
             LOGGER.error("Не удалось выполнить операцию: { }", e.getCause());
             throw new IllegalStateException();
         }
-        return model;
     }
 
     @Override

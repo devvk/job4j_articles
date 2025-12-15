@@ -15,11 +15,8 @@ import java.util.List;
 import java.util.Properties;
 
 public class ArticleStore implements Store<Article>, AutoCloseable {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleStore.class.getSimpleName());
-
     private final Properties properties;
-
     private Connection connection;
 
     public ArticleStore(Properties properties) {
@@ -36,8 +33,8 @@ public class ArticleStore implements Store<Article>, AutoCloseable {
                     properties.getProperty("username"),
                     properties.getProperty("password")
             );
-        } catch (SQLException throwables) {
-            LOGGER.error("Не удалось выполнить операцию: { }", throwables.getCause());
+        } catch (SQLException throwable) {
+            LOGGER.error("Не удалось выполнить операцию: { }", throwable.getCause());
             throw new IllegalStateException();
         }
     }
@@ -54,7 +51,7 @@ public class ArticleStore implements Store<Article>, AutoCloseable {
     }
 
     @Override
-    public Article save(Article model) {
+    public void save(Article model) {
         LOGGER.info("Сохранение статьи");
         var sql = "insert into articles(text) values(?)";
         try (var statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -68,7 +65,6 @@ public class ArticleStore implements Store<Article>, AutoCloseable {
             LOGGER.error("Не удалось выполнить операцию: { }", e.getCause());
             throw new IllegalStateException();
         }
-        return model;
     }
 
     @Override

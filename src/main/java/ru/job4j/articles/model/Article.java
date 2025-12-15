@@ -4,7 +4,7 @@ public class Article {
 
     private int id;
 
-    private String text;
+    private final String text;
 
     public Article(int id, String text) {
         this.id = id;
@@ -15,19 +15,11 @@ public class Article {
         this.text = text;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
 
     public String getText() {
         return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 }
